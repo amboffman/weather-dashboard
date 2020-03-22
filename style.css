@@ -18,6 +18,37 @@ header{
 
 }
 
+.high-index{
+    border: solid 1px red;
+    background-color: red;
+    border-radius: 25px;
+    padding: 2px 8px;
+    color: white;
+
+
+}
+
+.mid-index{
+    border: solid 1px gold;
+    background-color: gold;
+    border-radius: 25px;
+    padding: 2px 8px;
+    color: white;
+
+
+}
+
+.low-index{
+    border: solid 1px green;
+    background-color: green;
+    border-radius: 25px;
+    padding: 2px 8px;
+    color: white;
+
+
+}
+
+
 .container-five-day-forecast{
     padding: 20px;
     margin: 10px;

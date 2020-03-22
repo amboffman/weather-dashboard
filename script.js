@@ -33,7 +33,18 @@ $("#search-button").on("click", function (event) {
             method: "GET",
         }).then(function (data) {
             console.log(data);
-            var indexToday = $("<p>").text("Index: "+ data.value);
+            var indexSpan = $("<span>").text(data.value)
+            var indexToday = $("<p>").text("Index: ").attr("class","index-number");
+            indexToday.append(indexSpan);
+            if (data.value<3){
+                indexSpan.attr("class","low-index");
+            }
+            else if (data.value>2&&data.value<6){
+                indexSpan.attr("class","mid-index");
+            }
+            else{
+                indexSpan.attr("class","high-index");
+            };
             $(resultsContainer).append(indexToday);
         });
 
