@@ -4,6 +4,8 @@ var resultsContainer = $(".results-container");
 // WHEN I search for a city
 $("#search-button").on("click", function (event) {
     event.preventDefault();
+    //empty resultsDiv
+    $(resultsContainer).empty();
     var searchedCity = $("#search-text").val().trim();
 
 
@@ -13,23 +15,33 @@ $("#search-button").on("click", function (event) {
         "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + searchedCity + "&appid=" +
         APIKey;
-    $.ajax({
+        $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (results) {
         console.log(results);
         var cityName = $("<h2>").text(results.name + " (" + grabDate() + ")");
-        var todayIcon = $("<img>").attr("src",grabIcon()).attr("id","forecast-icon");
+        var todayIcon = $("<img>").attr("src", grabIcon()).attr("id", "forecast-icon");
         var todayTemp = $("<p>").text("Temp: " + grabTemp() + " °F");
-        // //   var todayHumidity = ;
-        // //   var todayWindSpeed = ;
-        // //   var todayUVIndex = ;
-        // //   var todayUVIndexSeverity = ;
+        var todayHumidity = $("<p>").text("Humidity: " + results.main.humidity + "%");
+        var todayWindSpeed = $("<p>").text("Wind Speed: " + grabWind() + " MPH");
 
-        //empty resultsDiv
-        $(resultsContainer).empty();
+        // //   var todayUVIndex = ;
+        var indexQueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + APIKey + "&lat=" + results.coord.lat + "&lon=" + results.coord.lon;
+        $.ajax({
+            url: indexQueryURL,
+            method: "GET",
+        }).then(function (data) {
+            console.log(data);
+            var indexToday = $("<p>").text("Index: "+ data.value);
+            $(resultsContainer).append(indexToday);
+        });
+
+
+
+        // //   var todayUVIndexSeverity = ;
         // append to resultsDiv;
-        $(resultsContainer).append(cityName, todayIcon, todayTemp);
+        $(resultsContainer).append(cityName, todayIcon, todayTemp, todayHumidity, todayWindSpeed);
         grabIcon();
         function grabDate() {
 
@@ -51,16 +63,23 @@ $("#search-button").on("click", function (event) {
             return iconImgURL;
         };
 
-        function grabTemp(){
-            var tempF = (results.main.temp-273.15) * 1.8 + 32;
+        function grabTemp() {
+            var tempF = (results.main.temp - 273.15) * 1.8 + 32;
             var displayTemp = tempF.toFixed(2)
             return displayTemp;
         }
 
+        function grabWind() {
+            var windMPH = results.wind.speed * 2.23694;
+            var displayWind = windMPH.toFixed(2)
+            return displayWind;
+        }
     })
+
 
     console.log("queryURL: " + queryURL);
 })
+
 
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
 
