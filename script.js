@@ -1,6 +1,7 @@
 //Prevent page from resetting when they hit the search button
 var todaysWeather = $(".container-todays-weather");
 var resultsContainer = $(".results-container");
+var weekForecastContainer = $(".week-forecast-container");
 // WHEN I search for a city
 $("#search-button").on("click", function (event) {
     event.preventDefault();
@@ -15,18 +16,18 @@ $("#search-button").on("click", function (event) {
         "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + searchedCity + "&appid=" +
         APIKey;
-        $.ajax({
+    $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (results) {
         console.log(results);
-        var cityName = $("<h2>").text(results.name + " (" + grabDate() + ")");
+        var cityName = $("<h2>").text(results.name + " (" + grabDateToday() + ")");
         var todayIcon = $("<img>").attr("src", grabIcon()).attr("id", "forecast-icon");
         var todayTemp = $("<p>").text("Temp: " + grabTemp() + " °F");
         var todayHumidity = $("<p>").text("Humidity: " + results.main.humidity + "%");
         var todayWindSpeed = $("<p>").text("Wind Speed: " + grabWind() + " MPH");
 
-        // //   var todayUVIndex = ;
+        // UV Index API //
         var indexQueryURL = "http://api.openweathermap.org/data/2.5/uvi?appid=" + APIKey + "&lat=" + results.coord.lat + "&lon=" + results.coord.lon;
         $.ajax({
             url: indexQueryURL,
@@ -34,27 +35,62 @@ $("#search-button").on("click", function (event) {
         }).then(function (data) {
             console.log(data);
             var indexSpan = $("<span>").text(data.value)
-            var indexToday = $("<p>").text("Index: ").attr("class","index-number");
+            var indexToday = $("<p>").text("Index: ").attr("class", "index-number");
             indexToday.append(indexSpan);
-            if (data.value<3){
-                indexSpan.attr("class","low-index");
+            if (data.value < 3) {
+                indexSpan.attr("class", "low-index");
             }
-            else if (data.value>2&&data.value<6){
-                indexSpan.attr("class","mid-index");
+            else if (data.value > 2 && data.value < 6) {
+                indexSpan.attr("class", "mid-index");
             }
-            else{
-                indexSpan.attr("class","high-index");
+            else {
+                indexSpan.attr("class", "high-index");
             };
             $(resultsContainer).append(indexToday);
         });
-
 
 
         // //   var todayUVIndexSeverity = ;
         // append to resultsDiv;
         $(resultsContainer).append(cityName, todayIcon, todayTemp, todayHumidity, todayWindSpeed);
         grabIcon();
-        function grabDate() {
+
+        var weekForecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchedCity + "&appid=" +
+            APIKey;
+        $.ajax({
+            url: weekForecastQueryURL,
+            method: "GET",
+        }).then(function (info) {
+            console.log(info);
+
+            createForecastCards();
+
+            function createForecastCards() {
+                var daysForecasted = 5;
+                for(i=0; i<daysForecasted; i++){
+                var forecastCard = $("<div>").attr("class", "card custom-card");
+                var weekDate = $("<h2>").text(grabDate5Day());
+                forecastCard.append(weekDate);
+                weekForecastContainer.append(forecastCard);
+
+                function grabDate5Day() {
+
+                    var weekDateStamp = info.list[i*8].dt;//times 8 as there are 8 times per day
+                    var months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+                    var date = new Date(weekDateStamp * 1000);
+                    var year = date.getFullYear();
+                    var month = months[date.getMonth()];
+                    var day = date.getDate();
+                    var displayDate = month + "/" + day + "/" + year;
+                    return displayDate;
+                };
+            }
+            }
+        });
+
+
+        //    FUNCTIONS
+        function grabDateToday() {
 
             var dateStamp = results.sys.sunset;
             var months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
@@ -66,6 +102,10 @@ $("#search-button").on("click", function (event) {
             var displayDate = month + "/" + day + "/" + year;
             return displayDate;
         };
+
+
+
+
 
         function grabIcon() {
             // create image
@@ -86,7 +126,6 @@ $("#search-button").on("click", function (event) {
             return displayWind;
         }
     })
-
 
     console.log("queryURL: " + queryURL);
 })

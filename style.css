@@ -61,3 +61,13 @@ display: inline;
 h2{
     display: inline;
 }
+
+.custom-card{
+
+    background-color: blue;
+    padding: 20px;
+    margin: 25px;
+    margin-top: 20px;
+    color: white;
+    display: inline;
+}
