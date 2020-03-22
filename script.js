@@ -1,11 +1,11 @@
 //Prevent page from resetting when they hit the search button
 var todaysWeather = $(".container-todays-weather");
+var resultsContainer = $(".results-container");
 // WHEN I search for a city
 $("#search-button").on("click", function (event) {
     event.preventDefault();
     var searchedCity = $("#search-text").val().trim();
-    var cityTitle = $("<h2>").text(searchedCity)
-    todaysWeather.append(cityTitle);
+
 
 
     var APIKey = "2d0adfed3ce3ee0b5d97b7be04cd9645";
@@ -13,18 +13,53 @@ $("#search-button").on("click", function (event) {
         "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" + searchedCity + "&appid=" +
         APIKey;
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-          }) .then(function(results){
-              var resultsString = JSON.stringify(results);
-            console.log("queryURL: " + queryURL);
-            console.log("Results: " + resultsString);
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (results) {
+        console.log(results);
+        var cityName = $("<h2>").text(results.name + " (" + grabDate() + ")");
+        var todayIcon = $("<img>").attr("src",grabIcon()).attr("id","forecast-icon");
+        var todayTemp = $("<p>").text("Temp: " + grabTemp() + " °F");
+        // //   var todayHumidity = ;
+        // //   var todayWindSpeed = ;
+        // //   var todayUVIndex = ;
+        // //   var todayUVIndexSeverity = ;
 
+        //empty resultsDiv
+        $(resultsContainer).empty();
+        // append to resultsDiv;
+        $(resultsContainer).append(cityName, todayIcon, todayTemp);
+        grabIcon();
+        function grabDate() {
 
+            var dateStamp = results.sys.sunset;
+            var months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 
-          })
+            var date = new Date(dateStamp * 1000);
+            var year = date.getFullYear();
+            var month = months[date.getMonth()];
+            var day = date.getDate();
+            var displayDate = month + "/" + day + "/" + year;
+            return displayDate;
+        };
 
+        function grabIcon() {
+            // create image
+            var iconID = results.weather[0].icon;
+            var iconImgURL = "http://openweathermap.org/img/wn/" + iconID + "@2x.png";
+            return iconImgURL;
+        };
+
+        function grabTemp(){
+            var tempF = (results.main.temp-273.15) * 1.8 + 32;
+            var displayTemp = tempF.toFixed(2)
+            return displayTemp;
+        }
+
+    })
+
+    console.log("queryURL: " + queryURL);
 })
 
 // THEN I am presented with current and future conditions for that city and that city is added to the search history

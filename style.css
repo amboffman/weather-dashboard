@@ -22,3 +22,11 @@ header{
     padding: 20px;
     margin: 10px;
 }
+
+#forecast-icon{
+display: inline;
+}
+
+h2{
+    display: inline;
+}
