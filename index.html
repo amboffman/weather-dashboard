@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Weather Dashboard</h1>
+                </div>
+            </div>
+    </header>
+
+    <div class="row">
+        <div class="col-3">
+            <!-- search history container -->
+            <div class="search-history-container">
+                <label>Search for a City: </label>
+                <form id = "search-form" class="form-inline">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search-text">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="search-button">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-9">
+            <!-- today's weather container -->
+            <div class="row">
+                <div class="container-todays-weather">
+                    <h2>Today's Forecast</h2>
+                </div>
+            </div>
+
+
+            <!-- five day forecast container -->
+            <div class="row">
+                <div class="container-five-day-forecast">
+                    <h2>5-Day Forecast</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

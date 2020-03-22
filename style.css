@@ -1,0 +1,24 @@
+header{ 
+    background-color:#303030;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.search-history-container {
+    background-color: #D0D0D0;
+    padding: 20px;
+}
+
+.container-todays-weather{
+    border: solid 1px #F0F0F0;
+    border-radius: 25px;
+    padding: 20px;
+    margin: 10px;
+
+}
+
+.container-five-day-forecast{
+    padding: 20px;
+    margin: 10px;
+}
