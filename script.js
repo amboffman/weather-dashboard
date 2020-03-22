@@ -8,7 +8,25 @@ $("#search-button").on("click", function (event) {
     todaysWeather.append(cityTitle);
 
 
+    var APIKey = "2d0adfed3ce3ee0b5d97b7be04cd9645";
+    var queryURL =
+        "https://api.openweathermap.org/data/2.5/weather?" +
+        "q=" + searchedCity + "&appid=" +
+        APIKey;
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+          }) .then(function(results){
+              var resultsString = JSON.stringify(results);
+            console.log("queryURL: " + queryURL);
+            console.log("Results: " + resultsString);
+
+
+
+          })
+
 })
+
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
 
 // WHEN I view current weather conditions for that city
