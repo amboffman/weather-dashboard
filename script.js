@@ -67,24 +67,46 @@ $("#search-button").on("click", function (event) {
 
             function createForecastCards() {
                 var daysForecasted = 5;
-                for(i=0; i<daysForecasted; i++){
-                var forecastCard = $("<div>").attr("class", "card custom-card");
-                var weekDate = $("<h2>").text(grabDate5Day());
-                forecastCard.append(weekDate);
-                weekForecastContainer.append(forecastCard);
+                for (i = 0; i < daysForecasted; i++) {
+                    var forecastCard = $("<div>").attr("class", "card custom-card");
+                    var divCol = $("<div>").attr("class", "col-2")
+                    var weekDate = $("<h2>").text(grabDate5Day()).attr("class", "card-header");
+                    var weekIcons = $("<img>").attr("src", grabWeekIcons()).attr("class", "week-icon");
+                    var weekTemperature = $("<p>").text(grabWeekTemperature());
+                    var weekHumidity = $("<p>").text("Humidity: " + info.list[i * 8].main.humidity + "%")
+                    forecastCard.append(weekDate, weekIcons, weekTemperature, weekHumidity);
+                    divCol.append(forecastCard);
+                    weekForecastContainer.append(divCol);
 
-                function grabDate5Day() {
+                    function grabDate5Day() {
 
-                    var weekDateStamp = info.list[i*8].dt;//times 8 as there are 8 times per day
-                    var months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-                    var date = new Date(weekDateStamp * 1000);
-                    var year = date.getFullYear();
-                    var month = months[date.getMonth()];
-                    var day = date.getDate();
-                    var displayDate = month + "/" + day + "/" + year;
-                    return displayDate;
-                };
-            }
+                        var weekDateStamp = info.list[i * 8].dt;//times 8 as there are 8 times per day
+                        var months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+                        var date = new Date(weekDateStamp * 1000);
+                        var year = date.getFullYear();
+                        var month = months[date.getMonth()];
+                        var day = date.getDate();
+                        var displayDate = month + "/" + day + "/" + year;
+                        return displayDate;
+                    };
+                    function grabWeekIcons() {
+
+                        var iconWeekID = info.list[i * 8].weather[0].icon;
+                        var iconWeekImgURL = "http://openweathermap.org/img/wn/" + iconWeekID + "@2x.png";
+                        return iconWeekImgURL;
+                    };
+                    function grabWeekTemperature() {
+
+                        var weekTemp = grabWeekTemp();
+                        return weekTemp;
+
+                        function grabWeekTemp() {
+                            var weekTempF = (info.list[i * 8].main.temp - 273.15) * 1.8 + 32;
+                            var displayWeekTemp = "Temp: " + weekTempF.toFixed(2) + " °F";
+                            return displayWeekTemp;
+                        }
+                    };
+                }
             }
         });
 

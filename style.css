@@ -65,9 +65,11 @@ h2{
 .custom-card{
 
     background-color: blue;
-    padding: 20px;
-    margin: 25px;
-    margin-top: 20px;
     color: white;
-    display: inline;
+    display: block;
+    padding-top: 10px;
+}
+.custom-card p{
+
+    padding-left: 20px;
 }
