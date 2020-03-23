@@ -2,15 +2,34 @@
 var todaysWeather = $(".container-todays-weather");
 var resultsContainer = $(".results-container");
 var weekForecastContainer = $(".week-forecast-container");
+var searchContainer = $(".search-history-container")
+var pastSearches = $(".past-searches")
+
 // WHEN I search for a city
 $("#search-button").on("click", function (event) {
+    var searchedCity = $("#search-text").val().trim();
     event.preventDefault();
     //empty resultsDiv
     $(resultsContainer).empty();
-    var searchedCity = $("#search-text").val().trim();
+    $(weekForecastContainer).empty();
 
+    // store search in local storage
+    localStorage.setItem("past-search",searchedCity);
+    pastSearchButtons();
+    //show buttons for each item in storage
+    function pastSearchButtons(){
+        var searches =[];
+        var storedSearches = localStorage.getItem("past-search");
+        console.log(storedSearches);
+        if (storedSearches !== null){
+            searches=storedSearches;
+            console.log(storedSearches);
+                var cityButton = $("<button>").text(searches).attr("class", "btn btn-light btn-lg btn-block city-button");
+                $(pastSearches).prepend(cityButton);
+        }
+    }
 
-
+    // Current Weather API //
     var APIKey = "2d0adfed3ce3ee0b5d97b7be04cd9645";
     var queryURL =
         "https://api.openweathermap.org/data/2.5/weather?" +
@@ -49,12 +68,10 @@ $("#search-button").on("click", function (event) {
             $(resultsContainer).append(indexToday);
         });
 
-
-        // //   var todayUVIndexSeverity = ;
-        // append to resultsDiv;
         $(resultsContainer).append(cityName, todayIcon, todayTemp, todayHumidity, todayWindSpeed);
         grabIcon();
 
+        // 5 Day Forecase API //
         var weekForecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + searchedCity + "&appid=" +
             APIKey;
         $.ajax({
